@@ -1,16 +1,19 @@
 package org.example.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.example.annotation.Property;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Manufacturer {
+public class Manufacturer extends CsvModel<Manufacturer> {
+    @Property
+    private Long id;
+    @Property
     private String name;
+    @Property
     private String country;
 
 }
