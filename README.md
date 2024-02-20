@@ -1,6 +1,6 @@
 WARNING!
 To ensure all the application tests are being passed successfully please run the whole test bunch on preexisting csv files before you start to use these files for operations with manufacturers and souvenirs.
-Otherwise the correct work of tests can be only guaranteed if you update them correspondingly!
+Otherwise the correct work of tests can only be guaranteed if you update them correspondingly!
 
 The description of the assignment including requirements (in Ukrainian) is provided below.
 
