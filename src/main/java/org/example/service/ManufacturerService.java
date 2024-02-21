@@ -52,6 +52,14 @@ public class ManufacturerService implements Service<Manufacturer> {
         return readAll(manufacturer -> manufacturerIds.contains(manufacturer.getId()));
     }
 
+    public List<Manufacturer> readManufacturersWhereSouvenirsNameAndYear(String name, int year) {
+        List<Long> manufacturerIds = souvenirService.readAllByNameAndYear(name, year).stream()
+                .map(Souvenir::getManufacturerId)
+                .distinct()
+                .toList();
+        return readAll(manufacturer -> manufacturerIds.contains(manufacturer.getId()));
+    }
+
     public boolean deleteManufacturerAndSouvenirs(long id) {
         boolean manufacturerDeleted = delete(id);
         boolean souvenirsDeleted = false;
@@ -102,4 +110,5 @@ public class ManufacturerService implements Service<Manufacturer> {
     public boolean delete(Predicate<Manufacturer> predicate) {
         return fileRepository.delete(predicate);
     }
+
 }

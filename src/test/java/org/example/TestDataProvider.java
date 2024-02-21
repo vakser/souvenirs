@@ -48,8 +48,8 @@ public class TestDataProvider {
         return Stream.of(
                 Arguments.of(
                         List.of(
-                            new Souvenir(-1L, "Small doll",
-                                    dateFormat.parse("2000-12-04"), 1, 0L)
+                                new Souvenir(-1L, "Small doll",
+                                        dateFormat.parse("2000-12-04"), 1, 0L)
                         ),
                         2000
                 )

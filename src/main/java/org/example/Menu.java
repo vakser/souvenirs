@@ -31,6 +31,7 @@ public class Menu {
     private static final String BY_PRICE = "byPrice";
     private static final String BY_COUNTRY = "byCountry";
     private static final String BY_MANUFACTURER_ID = "byManufacturerId";
+    public static final String BY_SOUVENIR_NAME_AND_YEAR = "bySouvenirNameAndYear";
     private static final Scanner scanner = new Scanner(System.in);
     private static final ManufacturerService manufacturerService = ManufacturerService.getInstance();
     private static final SouvenirService souvenirService = SouvenirService.getInstance();
@@ -67,16 +68,16 @@ public class Menu {
     }
 
     private static void printInstructions() {
-        System.out.println("\nTo close the program, enter " + EXIT);
-        System.out.println("To add a new souvenir, enter " + ADD_SOUVENIR);
-        System.out.println("To add a new manufacturer, enter " + ADD_MANUFACTURER);
-        System.out.println("To view all manufacturers and all their souvenirs, enter " + VIEW_MANUFACTURERS_AND_SOUVENIRS);
-        System.out.println("To find souvenirs, print " + FIND_SOUVENIR);
-        System.out.println("To find manufacturers, print " + FIND_MANUFACTURER);
-        System.out.println("To update a souvenir, print " + UPDATE_SOUVENIR);
-        System.out.println("To update a manufacturer, print " + UPDATE_MANUFACTURER);
-        System.out.println("To delete a souvenir, print " + DELETE_SOUVENIR);
-        System.out.println("To delete a manufacturer and corresponding souvenirs, print " + DELETE_MANUFACTURER_AND_SOUVENIRS);
+        System.out.println("\nTo close the program, enter: " + EXIT);
+        System.out.println("To add a new souvenir, enter: " + ADD_SOUVENIR);
+        System.out.println("To add a new manufacturer, enter: " + ADD_MANUFACTURER);
+        System.out.println("To view all manufacturers and all their souvenirs, enter: " + VIEW_MANUFACTURERS_AND_SOUVENIRS);
+        System.out.println("To find souvenirs, enter: " + FIND_SOUVENIR);
+        System.out.println("To find manufacturers, enter: " + FIND_MANUFACTURER);
+        System.out.println("To update a souvenir, enter: " + UPDATE_SOUVENIR);
+        System.out.println("To update a manufacturer, enter: " + UPDATE_MANUFACTURER);
+        System.out.println("To delete a souvenir, enter: " + DELETE_SOUVENIR);
+        System.out.println("To delete a manufacturer and corresponding souvenirs, enter: " + DELETE_MANUFACTURER_AND_SOUVENIRS);
     }
 
     @SneakyThrows
@@ -148,6 +149,7 @@ public class Menu {
             System.out.println("Enter id of the souvenir you want to delete: ");
             try {
                 Long id = Long.parseLong(scanner.nextLine());
+                System.out.println("Souvenir is being deleted");
                 boolean removed = souvenirService.delete(id);
                 if (removed) {
                     System.out.println("Souvenir has been successfully deleted");
@@ -169,6 +171,7 @@ public class Menu {
             System.out.println("Enter id of the manufacturer you want to delete: ");
             try {
                 long id = Long.parseLong(scanner.nextLine());
+                System.out.println("Manufacturer and corresponding souvenirs are being deleted");
                 boolean removed = manufacturerService.deleteManufacturerAndSouvenirs(id);
                 if (removed) {
                     System.out.println("Manufacturer and corresponding souvenirs have been successfully deleted");
@@ -203,17 +206,14 @@ public class Menu {
                 String price = scanner.nextLine();
                 souvenir.setPrice(price.isBlank() ? souvenir.getPrice() : Double.parseDouble(price));
                 System.out.println("Enter a new manufacturing date in ISO 8601 format YYYY-MM-DD (for example, 2024-02-13) or skip if you want to leave the same date: ");
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String date = scanner.nextLine();
-                souvenir.setManufacturingDate(date.isBlank() ? souvenir.getManufacturingDate() : dateFormat.parse(date));
-                System.out.println("Enter manufacturer id: ");
-                String newManufacturerId = scanner.nextLine();
-                Long manufacturerId = newManufacturerId.isBlank() ? souvenir.getManufacturerId() : Long.parseLong(newManufacturerId);
-                if (manufacturerService.read(manufacturerId) == null) {
-                    System.out.println("Manufacturer with this id does not exist!");
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String date = scanner.nextLine();
+                    souvenir.setManufacturingDate(date.isBlank() ? souvenir.getManufacturingDate() : dateFormat.parse(date));
+                } catch (ParseException e) {
+                    System.out.println("Error: " + e.getMessage());
                     break;
                 }
-                souvenir.setManufacturerId(manufacturerId);
                 System.out.println("Souvenir is being updated...");
                 if (souvenirService.update(souvenir)) {
                     System.out.println("Souvenir has been successfully updated!");
@@ -269,6 +269,7 @@ public class Menu {
             System.out.println("To view manufacturer with specific id, print: " + BY_ID);
             System.out.println("To view all manufacturers whose souvenirs were produced in specific year, enter: " + BY_YEAR);
             System.out.println("To view all manufacturers which have souvenirs with the prices below the desired one, enter: " + BY_PRICE);
+            System.out.println("To view all manufacturers produced specific souvenir in specific year, enter: " + BY_SOUVENIR_NAME_AND_YEAR);
             String searchType = scanner.nextLine();
             switch (searchType) {
                 case ALL:
@@ -301,6 +302,16 @@ public class Menu {
                         System.out.println("Error: " + e.getMessage());
                     }
                     break;
+                case BY_SOUVENIR_NAME_AND_YEAR:
+                    System.out.println("Enter souvenir name: ");
+                    String name = scanner.nextLine();
+                    System.out.println("Enter year of manufacturing: ");
+                    try {
+                        int year = Integer.parseInt(scanner.nextLine());
+                        manufacturerService.readManufacturersWhereSouvenirsNameAndYear(name, year).forEach(System.out::println);
+                    } catch (RuntimeException e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
                 case EXIT:
                     break label;
             }

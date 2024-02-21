@@ -52,6 +52,10 @@ public class SouvenirService implements Service<Souvenir> {
         return readAll(souvenir -> souvenir.getManufacturingYear() == year);
     }
 
+    public List<Souvenir> readAllByNameAndYear(String name, int year) {
+        return readAll(souvenir -> souvenir.getName().equals(name) && souvenir.getManufacturingYear() == year);
+    }
+
     @Override
     public Souvenir save(Souvenir souvenir) {
         List<Souvenir> existingSouvenirs = fileRepository.readAll();
