@@ -56,6 +56,16 @@ public class ManufacturerServiceTest {
         assertEquals(expected.getFirst().getCountry(), actual.getFirst().getCountry());
     }
 
+    @ParameterizedTest
+    @MethodSource("org.example.TestDataProvider#testReadManufacturersWhereSouvenirsNameAndYear")
+    public void testReadManufacturersWhereSouvenirsNameAndYear(List<Manufacturer> expected, String name, int year) {
+        List<Manufacturer> actual = manufacturerService.readManufacturersWhereSouvenirsNameAndYear(name, year);
+        assertEquals(expected.getFirst().getName(), actual.getFirst().getName());
+        assertEquals(expected.getFirst().getCountry(), actual.getFirst().getCountry());
+        assertEquals(expected.getLast().getName(), actual.getLast().getName());
+        assertEquals(expected.getLast().getCountry(), actual.getLast().getCountry());
+    }
+
     @AfterAll
     public static void deleteManufacturerAndSouvenirs() {
         long id = manufacturerService.readAll().getLast().getId();

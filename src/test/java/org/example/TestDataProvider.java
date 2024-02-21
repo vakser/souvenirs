@@ -33,6 +33,19 @@ public class TestDataProvider {
         );
     }
 
+    public static Stream<Arguments> testReadManufacturersWhereSouvenirsNameAndYear() {
+        return Stream.of(
+                Arguments.of(
+                        List.of(
+                                new Manufacturer(-11L, "Potsdam GmBH", "Germany"),
+                                new Manufacturer(-10L, "Meier und Sohn", "Germany")
+                        ),
+                        "Gartenzwerg",
+                        1913
+                )
+        );
+    }
+
     public static Stream<Arguments> testSaveManufacturerAndSouvenir() throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return Stream.of(
