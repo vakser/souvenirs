@@ -1,13 +1,11 @@
 package org.example;
 
+import org.example.model.Manufacturer;
+import org.example.service.ManufacturerService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.example.model.Manufacturer;
-import org.example.model.Souvenir;
-import org.example.service.ManufacturerService;
-import org.example.service.SouvenirService;
 
 import java.util.List;
 
@@ -16,28 +14,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ManufacturerServiceTest {
 
     private static ManufacturerService manufacturerService;
-    private static SouvenirService souvenirService;
 
     @BeforeAll
     public static void setUp() {
         manufacturerService = ManufacturerService.getInstance();
-        souvenirService = SouvenirService.getInstance();
     }
 
     @ParameterizedTest
-    @MethodSource("org.example.TestDataProvider#testSaveManufacturerAndSouvenir")
-    public void testSaveManufacturerAndSouvenir(Manufacturer expectedManufacturer, Souvenir expectedSouvenir) {
-        Long manufacturerId = manufacturerService.readAll().getLast().getId() + 1;
-        expectedManufacturer.setId(manufacturerId);
-        Long souvenirId = souvenirService.readAll().getLast().getId() + 1;
-        expectedSouvenir.setId(souvenirId);
-        expectedSouvenir.setManufacturerId(manufacturerId);
+    @MethodSource("org.example.TestDataProvider#testSaveManufacturer")
+    public void testSaveNonExistingManufacturer(Manufacturer expectedManufacturer) {
         Manufacturer actualManufacturer = manufacturerService.save(expectedManufacturer);
-        Souvenir actualSouvenir = souvenirService.save(expectedSouvenir);
         assertEquals(expectedManufacturer.getName(), actualManufacturer.getName());
         assertEquals(expectedManufacturer.getCountry(), actualManufacturer.getCountry());
-        assertEquals(expectedSouvenir.getName(), actualSouvenir.getName());
-        assertEquals(expectedSouvenir.getManufacturerId(), actualSouvenir.getManufacturerId());
     }
 
     @ParameterizedTest

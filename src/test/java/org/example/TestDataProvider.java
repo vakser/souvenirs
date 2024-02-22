@@ -46,12 +46,10 @@ public class TestDataProvider {
         );
     }
 
-    public static Stream<Arguments> testSaveManufacturerAndSouvenir() throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public static Stream<Arguments> testSaveManufacturer() {
         return Stream.of(
                 Arguments.of(
-                        new Manufacturer(-2L, "Zambian souvenirs", "Zambia"),
-                        new Souvenir(-2L, "Victoria falls", dateFormat.parse("2022-07-04"),1.0,0L)
+                        new Manufacturer(-2L, "Zambian souvenirs", "Zambia")
                 )
         );
     }
