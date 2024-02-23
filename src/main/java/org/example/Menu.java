@@ -312,6 +312,7 @@ public class Menu {
                     } catch (RuntimeException e) {
                         System.out.println("Error: " + e.getMessage());
                     }
+                    break;
                 case EXIT:
                     break label;
             }
